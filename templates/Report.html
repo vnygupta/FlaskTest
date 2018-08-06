@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Inventory Status</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+
+    <form role="form" action="/" method="GET">
+  <button type="submit" class="btn btn-primary">Home Page</button>
+  </form>
+  <h2>Inventory Status</h2>
+  <!-- Trigger the modal with a button -->
+
+
+  <!--button type="button" class="btn btn-info btn-lg">Viwe </button-->
+
+  <table class="table table-hover table-bordered">
+
+
+      <tr>
+          {% for i in range(list1) %}
+          <td  style="text-align:center">
+           {{Columns[i][0]}}
+          </td>
+         {% endfor %}
+      </tr>
+
+
+       {% for location in Locations %}
+      <tr>
+
+          {% for j in range(list1) %}
+          <td  style="text-align:center">
+              {{location[j]}}
+          </td>
+          {% endfor %}
+
+      </tr>
+ {% endfor %}
+</table>
+</div>
+
+</body>
+</html>
+

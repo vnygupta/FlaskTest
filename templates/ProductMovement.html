@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Product Movement</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close"  data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <!-- <strong>Title</strong> --> {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<div class="container">
+
+
+     <form role="form" action="/" method="GET">
+  <button type="submit" class="btn btn-primary">Home Page</button>
+  </form>
+  <h2>Product Movement</h2>
+  <!-- Trigger the modal with a button -->
+
+  <form id="form" action="/MoveProduct/" method='GET'>
+  <input type="button" readonly="readonly" class="btn btn-info btn-lg" id="myButton" data-toggle="modal" data-target="#myModal" value="Move Product">
+  </form>
+  <br>
+  <br>
+  <br>
+  <!--button type="button" class="btn btn-info btn-lg">Viwe </button-->
+  <form action="/ProductMovement/details/" method='POST'>
+  <button type="submit" class="btn btn-info btn-lg">Viwe Product Movement</button>
+  </form>
+  <br>
+  <br>
+  <br>
+  <table class="table table-hover table-bordered">
+      <thead>
+      <tr>
+          <th  style="text-align:center">
+              movement id
+          </th>
+          <th  style="text-align:center">
+              timestamp
+          </th>
+          <th  style="text-align:center">
+              from location
+          </th>
+           <th  style="text-align:center">
+              to location
+          </th>
+           <th  style="text-align:center">
+              product
+          </th>
+           <th  style="text-align:center">
+              Quantity
+          </th>
+      </tr>
+      </thead>
+      {% for location in Locations %}
+      <tr>
+          <td  style="text-align:center">
+              {{location[0]}}
+          </td>
+          <td  style="text-align:center">
+              {{location[1]}}
+          </td>
+          <td  style="text-align:center">
+              {{location[2]}}
+          </td>
+          <td  style="text-align:center">
+              {{location[3]}}
+          </td>
+          <td  style="text-align:center">
+              {{location[4]}}
+          </td>
+          <td  style="text-align:center">
+              {{location[5]}}
+          </td>
+
+      </tr>
+      {% endfor %}
+</table>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Product</h4>
+        </div>
+        <div class="modal-body">
+          <form role='form' method="POST" action="/ProductMovement/">
+              <div>
+             <select name='location_from' id="location_from" class="selectpicker form-control">
+                 <option value=""  selected>From location</option>
+
+             </select>
+             <br>
+             <br>
+             </div>
+             <div>
+            <select name='location_to' id="location_to" class="selectpicker form-control" >
+                <option value="" disabled selected>To location</option>
+                {% for location in Locations_to %}
+                  <option value= "{{location[0]}}" >{{location[0]}}</option>
+                {% endfor %}
+             </select>
+             <br><br>
+             </div>
+             <div>
+             <select name='product' id="product" class="form-control">
+                 <option value="" disabled selected>Select product to be moved</option>
+                {% for product in Products %}
+                  <option value= "{{product[0]}}" >{{product[0]}}</option>
+                {% endfor %}
+             </select>
+             <br><br>
+             </div>
+              <div>
+                  <input type='number'  class="selectpicker form-control"  name='qty' placeholder="Enter Quantity"  required>
+              </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <input type="submit" value="Add" class="btn btn-success" >
+
+        </div>
+         </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
+<script  type="text/javascript">
+
+
+
+
+
+$(function() {
+    $('#myButton').click(function() {
+
+        $.ajax({
+            url: '/MoveProduct/',
+            data: $('form').serialize(),
+            type: 'POST',
+            success: function(response) {
+                console.log(response[0],response[1],response[2]);
+
+
+
+                  for(var i=0;i<response[0].length;i++){
+
+                    $("#product").append('<option value="'+response[0][i]+'">'+response[0][i]+'</option>');
+
+                   }
+
+                 for(var i=0;i<response[1].length;i++){
+
+                    $("#location_from").append('<option value="'+response[1][i]+'">'+response[1][i]+'</option>');
+
+                   }
+                 for(var i=0;i<response[2].length;i++){
+
+                    $("#location_to").append('<option value="'+response[2][i]+'">'+response[2][i]+'</option>');
+
+                   }
+
+
+
+
+
+
+
+            },
+            error: function(error) {
+                console.log(error);
+
+            }
+        });
+    });
+});
+
+
+</script>
